@@ -19,7 +19,7 @@ SCREEN_HEIGHT = 800
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Chess")
-icon = pygame.image.load("images/Chess_ndt45.svg.png")
+icon = pygame.image.load("images/chess_icon-icons.com_65163.png")
 pygame.display.set_icon(icon)
 board = Board()
 game_running = False
@@ -205,6 +205,15 @@ def main_menu():
                              2 - rect_height // 2, rect_width, rect_height), border_radius=rect_width // 14)
             pygame.draw.rect(screen, (235, 233, 228), (SCREEN_WIDTH // 2 - rect_width // 2, SCREEN_HEIGHT //
                              2 + rect_height // 2 + 20, rect_width, rect_height), border_radius=rect_width // 14)
+            screen.blit(pygame.image.load(
+                'images/play_green_button_icon_227849-2.png'), (SCREEN_WIDTH // 2 - 32, SCREEN_HEIGHT //
+                                                                2 - rect_height - 60 + 8, rect_width, rect_height))
+            screen.blit(pygame.image.load(
+                'images/application_software_office_loadcenter_charged_1856.png'), (SCREEN_WIDTH // 2 - 32, SCREEN_HEIGHT //
+                                                                                    2 - 32, rect_width, rect_height))
+            screen.blit(pygame.image.load(
+                'images/remove_delete_exit_close_1545.png'), (SCREEN_WIDTH // 2 - 32, SCREEN_HEIGHT //
+                                                              2 + rect_height - 12, rect_width, rect_height))
             pygame.display.flip()
 
             for event in pygame.event.get():
