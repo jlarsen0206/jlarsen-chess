@@ -69,7 +69,8 @@ def draw_pieces():
             if board.squares[j][i] != None:
                 piece = board.squares[j][i]
                 if isinstance(piece, Piece):
-                    screen.blit(piece.draw(), (i*100, j * 100))
+                    if (board.selected_piece == None or not (piece is board.selected_piece)):
+                        screen.blit(piece.draw(), (i*100, j * 100))
             i = i + 1
 
 # TODO: add valid move square selection
@@ -84,6 +85,11 @@ def handle_selected_piece():
             for move in board.possible_moves(board.selected_piece):
                 pygame.draw.circle(screen, (239, 247, 2),
                                    (move[0] * 100 + 50, move[1] * 100 + 50), 15)
+
+            # Follow cursor
+            mouse_pos = pygame.mouse.get_pos()
+            screen.blit(board.selected_piece.draw(),
+                        (mouse_pos[0] - 50, mouse_pos[1] - 50))
 
 
 def handle_check(player):
@@ -108,8 +114,6 @@ def display_time():
 
 def handle_checkmate(player):
     pass
-
-# TODO in Board class: randomize board orientation
 
 # TODO: figure out how to render text for buttons, time, rect
 # TODO: improve main menu
