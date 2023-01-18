@@ -1,0 +1,7 @@
+*.png
+board.csv
+*.cfg
+__pycache__/
+bin/
+include/
+lib/
