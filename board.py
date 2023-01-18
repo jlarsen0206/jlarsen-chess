@@ -18,22 +18,22 @@ class Board:
     check = False
     threatening_piece = None
     orientation = random.randint(0, 1)
-    upper_color = "WHITE" if orientation == 0 else "BLACK"
-    lower_color = "WHITE" if orientation != 0 else "BLACK"
+    UPPER_COLOR = "WHITE" if orientation == 0 else "BLACK"
+    LOWER_COLOR = "WHITE" if orientation != 0 else "BLACK"
 
     squares = [
-        [rook.Rook("WHITE"), knight.Knight("WHITE"), bishop.Bishop("WHITE"), king.King("WHITE"), queen.Queen(
-            "WHITE"), bishop.Bishop("WHITE"), knight.Knight("WHITE"), rook.Rook("WHITE")],
-        [pawn.Pawn("WHITE"), pawn.Pawn("WHITE"), pawn.Pawn("WHITE"), pawn.Pawn("WHITE"), pawn.Pawn(
-            "WHITE"), pawn.Pawn("WHITE"), pawn.Pawn("WHITE"), pawn.Pawn("WHITE")],
+        [rook.Rook(UPPER_COLOR), knight.Knight(UPPER_COLOR), bishop.Bishop(UPPER_COLOR), king.King(UPPER_COLOR), queen.Queen(
+            UPPER_COLOR), bishop.Bishop(UPPER_COLOR), knight.Knight(UPPER_COLOR), rook.Rook(UPPER_COLOR)],
+        [pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(
+            UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1)],
         [None, None, None, None, None, None, None, None],
         [None, None, None, None, None, None, None, None],
         [None, None, None, None, None, None, None, None],
         [None, None, None, None, None, None, None, None],
-        [pawn.Pawn("BLACK"), pawn.Pawn("BLACK"), pawn.Pawn("BLACK"), pawn.Pawn("BLACK"), pawn.Pawn(
-            "BLACK"), pawn.Pawn("BLACK"), pawn.Pawn("BLACK"), pawn.Pawn("BLACK")],
-        [rook.Rook("BLACK"), knight.Knight("BLACK"), bishop.Bishop("BLACK"), king.King(
-            "BLACK"), queen.Queen("BLACK"), bishop.Bishop("BLACK"), knight.Knight("BLACK"), rook.Rook("BLACK")]
+        [pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(
+            LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1)],
+        [rook.Rook(LOWER_COLOR), knight.Knight(LOWER_COLOR), bishop.Bishop(LOWER_COLOR), king.King(
+            LOWER_COLOR), queen.Queen(LOWER_COLOR), bishop.Bishop(LOWER_COLOR), knight.Knight(LOWER_COLOR), rook.Rook(LOWER_COLOR)]
     ]
 
     def update_player(self):
@@ -207,16 +207,16 @@ class Board:
     def check_for_promotions(self):
         for i in range(8):
             if (isinstance(self.squares[0][i], pawn.Pawn)):
-                self.squares[0][i] = queen.Queen("BLACK")
+                self.squares[0][i] = queen.Queen(self.LOWER_COLOR)
             if (isinstance(self.squares[7][i], pawn.Pawn)):
-                self.squares[7][i] = queen.Queen("WHITE")
+                self.squares[7][i] = queen.Queen(self.UPPER_COLOR)
 
     # Castling kingside. Precondition: castling is a valid move based solely on board positioning
     def castle_kingside(self):
         if self.check:
             return
 
-        if self.player == "WHITE":
+        if self.player == self.UPPER_COLOR:
             row = 0
         else:
             row = 7
@@ -241,7 +241,7 @@ class Board:
         if self.check:
             return
 
-        if self.player == "WHITE":
+        if self.player == self.UPPER_COLOR:
             row = 0
         else:
             row = 7

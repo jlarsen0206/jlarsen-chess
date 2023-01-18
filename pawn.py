@@ -8,9 +8,11 @@ class Pawn(piece.Piece):
     img = ""
     color = ""
     taken_firstmove = False
+    orientation = 0
 
-    def __init__(self, color):
+    def __init__(self, color, orientation):
         super().__init__(color)
+        self.orientation = orientation
         if (color == "WHITE"):
             self.img = "images/Chess_plt45.svg.png"
             self.color = color
@@ -28,22 +30,22 @@ class Pawn(piece.Piece):
         if isinstance(board[end_y][end_x], piece.Piece):
             return False
         if end_x == start_x:
-            if self.color == "WHITE" and end_y - start_y == 1:
+            if self.orientation == 1 and end_y - start_y == 1:
                 return True
-            if self.color == "BLACK" and end_y - start_y == -1:
+            if self.orientation == -1 and end_y - start_y == -1:
                 return True
             if not self.taken_firstmove:
-                if self.color == "WHITE" and end_y - start_y == 2:
+                if self.orientation == 1 and end_y - start_y == 2:
                     return True
-                if self.color == "BLACK" and end_y - start_y == -2:
+                if self.orientation == -1 and end_y - start_y == -2:
                     return True
 
         return False
 
     def valid_capture(self, start_x, start_y, end_x, end_y, board):
         if end_x - start_x == 1 or end_x - start_x == -1:
-            if (self.color == "WHITE") and end_y - start_y == 1:
+            if (self.orientation == 1) and end_y - start_y == 1:
                 return True
-            if (self.color == "BLACK") and end_y - start_y == -1:
+            if (self.orientation == -1) and end_y - start_y == -1:
                 return True
         return False
