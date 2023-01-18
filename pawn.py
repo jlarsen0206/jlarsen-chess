@@ -25,6 +25,8 @@ class Pawn(piece.Piece):
         for i in [start_x, start_y, end_x, end_y]:
             if i < 0 or i > 7:
                 return False
+        if isinstance(board[end_y][end_x], piece.Piece):
+            return False
         if end_x == start_x:
             if self.color == "WHITE" and end_y - start_y == 1:
                 return True
