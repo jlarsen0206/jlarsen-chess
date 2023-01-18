@@ -7,6 +7,7 @@ import queen
 import king
 import pygame
 from pygame.locals import *
+import random
 
 
 class Board:
@@ -16,6 +17,9 @@ class Board:
     move_pos = (None, None)
     check = False
     threatening_piece = None
+    orientation = random.randint(0, 1)
+    upper_color = "WHITE" if orientation == 0 else "BLACK"
+    lower_color = "WHITE" if orientation != 0 else "BLACK"
 
     squares = [
         [rook.Rook("WHITE"), knight.Knight("WHITE"), bishop.Bishop("WHITE"), king.King("WHITE"), queen.Queen(
