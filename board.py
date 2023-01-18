@@ -82,9 +82,13 @@ class Board:
                 self.squares[i][j] = None
 
     # Creates a new board, used during a load event
-    def construct_board(self, board_text, player):
+    def construct_board(self, board_text, player, orientation):
         self.clear_board()
         self.player = player
+        self.orientation = orientation
+        self.UPPER_COLOR = "WHITE" if orientation == 0 else "BLACK"
+        self.LOWER_COLOR = "WHITE" if orientation != 0 else "BLACK"
+
         color = ""
         for i in range(8):
             for j in range(8):
@@ -102,7 +106,10 @@ class Board:
 
                 match board_text[i][j][1]:
                     case "p":
-                        self.squares[i][j] = pawn.Pawn(color)
+                        if color == self.UPPER_COLOR:
+                            self.squares[i][j] = pawn.Pawn(color, 1)
+                        else:
+                            self.squares[i][j] = pawn.Pawn(color, -1)
                     case "n":
                         self.squares[i][j] = knight.Knight(color)
                     case "b":

@@ -73,8 +73,6 @@ def draw_pieces():
                         screen.blit(piece.draw(), (i*100, j * 100))
             i = i + 1
 
-# TODO: add valid move square selection
-
 
 def handle_selected_piece():
     if board.selected_piece:
@@ -106,8 +104,10 @@ def handle_check(player):
 
 
 def display_time():
-    screen.blit(clock.display_time("WHITE"), dest=(800, 100))
-    screen.blit(clock.display_time("BLACK"), dest=(800, 700))
+    screen.blit(clock.display_time("WHITE"), dest=(
+        (800, 100) if board.UPPER_COLOR == "WHITE" else (800, 700)))
+    screen.blit(clock.display_time("BLACK"), dest=(
+        (800, 700) if board.UPPER_COLOR == "WHITE" else (800, 100)))
 
 # TODO
 
@@ -116,7 +116,6 @@ def handle_checkmate(player):
     pass
 
 # TODO: figure out how to render text for buttons, time, rect
-# TODO: improve main menu
 
 
 def chess():
