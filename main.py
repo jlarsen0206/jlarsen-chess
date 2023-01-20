@@ -27,18 +27,19 @@ game_running = False
 clock = ChessTime(600000, 600000)
 clock.start()
 
-
+#Calls all functions related to board display in the appropriate order
 def draw():
     draw_board(board.squares)
-    handle_selected_piece()
     board.check_for_promotions()
     board.check_for_check(board.player)
     handle_check(board.player)
-    draw_pieces()
     board.check_for_mate()
+    draw_pieces()
+    handle_selected_piece()
     # display_time()
 
-
+#Draws the game board
+#TODO: Change board orientation based on the random selection
 def draw_board(squares):
     square_size = SCREEN_HEIGHT // 8
     # White Squares
@@ -73,7 +74,6 @@ def draw_pieces():
                         screen.blit(piece.draw(), (i*100, j * 100))
             i = i + 1
 
-
 def handle_selected_piece():
     if board.selected_piece:
         square = board.get_square(board.selected_piece)
@@ -87,7 +87,7 @@ def handle_selected_piece():
             # Follow cursor
             mouse_pos = pygame.mouse.get_pos()
             screen.blit(board.selected_piece.draw(),
-                        (mouse_pos[0] - 50, mouse_pos[1] - 50))
+                        (mouse_pos[0] - 45, mouse_pos[1] - 45))
 
 
 def handle_check(player):
@@ -101,8 +101,6 @@ def handle_check(player):
 
 # Displays time for each player. Text rendering in pygame is not compatible with MacOS M1
 # Time constraints not implemented in game loop since time is not visible
-
-
 def display_time():
     screen.blit(clock.display_time("WHITE"), dest=(
         (800, 100) if board.UPPER_COLOR == "WHITE" else (800, 700)))
@@ -110,8 +108,6 @@ def display_time():
         (800, 700) if board.UPPER_COLOR == "WHITE" else (800, 100)))
 
 # TODO
-
-
 def handle_checkmate(player):
     pass
 

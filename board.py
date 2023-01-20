@@ -276,7 +276,9 @@ class Board:
             pos = self.get_square(piece)
         for i in range(8):
             for j in range(8):
-                if (piece.valid_move(pos[0], pos[1], i, j, self.squares) and (self.squares[j][i] == None or self.squares[j][i].color != self.player)):
+                if (piece.valid_move(pos[0], pos[1], i, j, self.squares) and self.squares[j][i] == None):
+                    moves.append((i, j))
+                elif (piece.valid_capture(pos[0], pos[1], i, j, self.squares) and isinstance(self.squares[j][i], Piece) and self.squares[j][i].color != self.player):
                     moves.append((i, j))
         return moves
 
@@ -325,6 +327,7 @@ class Board:
 
         return True
 
+    #Not used in-game yet due to font rendering incompatibility
     def compute_points(self, player):
         points = 0
         for i in range(8):
