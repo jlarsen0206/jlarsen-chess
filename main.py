@@ -1,5 +1,7 @@
 import pygame
 from pygame.locals import *
+from tkinter import *
+import tkinter.messagebox
 import sys
 from piece import Piece
 from pawn import Pawn
@@ -11,11 +13,13 @@ from king import King
 from board import Board
 from handleSaveLoad import HandleCSV
 from chesstime import ChessTime
+from opponent import Opponent
 
 pygame.init()
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
+
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Chess")
@@ -23,6 +27,7 @@ icon = pygame.image.load("images/chess_icon-icons.com_65163.png")
 pygame.display.set_icon(icon)
 board = Board()
 game_running = False
+single_player_running = False
 
 clock = ChessTime(600000, 600000)
 clock.start()
@@ -33,9 +38,10 @@ def draw():
     board.check_for_promotions()
     board.check_for_check(board.player)
     handle_check(board.player)
-    board.check_for_mate()
     draw_pieces()
     handle_selected_piece()
+    if board.check_for_mate():
+        handle_checkmate(board.player)
     # display_time()
 
 #Draws the game board
@@ -88,7 +94,6 @@ def handle_selected_piece():
             screen.blit(board.selected_piece.draw(),
                         (mouse_pos[0] - 45, mouse_pos[1] - 45))
 
-
 def handle_check(player):
     for i in range(8):
         for j in range(8):
@@ -108,11 +113,15 @@ def display_time():
 
 # TODO
 def handle_checkmate(player):
-    pass
-
+    global game_running
+    global single_player_running
+    
+    if game_running:
+        pass
+    if single_player_running:
+        pass
+    
 # TODO: figure out how to render text for buttons, time, rect
-
-
 def chess():
 
     global board
@@ -163,13 +172,9 @@ def chess():
 
                     board.move_to_open(clicked_coords[0], clicked_coords[1])
 
-                    clock.compute_time(board.player)
-
                 elif isinstance(clicked, Piece) and clicked.color != board.player:
 
                     board.capture(clicked)
-
-                    clock.compute_time(board.player)
 
                 elif isinstance(clicked, Piece) and clicked.color == board.player:
 
@@ -183,20 +188,103 @@ def chess():
 
                     board.set_reselect()
 
+def single_player():
+    global board
+    global single_player_running
+    
+    player_color = "BLACK" if board.orientation == 0 else "WHITE"
+
+    opponent = Opponent("WHITE" if player_color == "BLACK" else "BLACK", board)
+
+    if single_player_running == False:
+        return
+
+    if board.player != player_color:
+        move = opponent.best_move()
+        print(move)
+
+        if isinstance(board.squares[move[1]][move[0]], Piece):
+            board.capture(board.get_square(move[1], move[0]))
+        else:
+            board.move_to_open(move[0], move[1])
+
+        board.update_player()
+    
+    draw()
+
+    pygame.display.flip()
+
+    for event in pygame.event.get():
+
+        if event.type == KEYDOWN:
+
+            if event.key == K_ESCAPE:
+                single_player_running = False
+
+            # Save: write to database.csv
+            elif event.key == K_s:
+                file = HandleCSV('board.csv')
+                file.handle_save(board)
+
+        elif event.type == QUIT:
+            sys.exit()
+
+        elif event.type == MOUSEBUTTONDOWN:
+
+            clicked = board.get_clicked_piece()
+
+            # Click outside of board
+            if (clicked == (-1, -1)):
+                continue
+
+            clicked_coords = board.move_pos
+
+            if not board.selected_piece and isinstance(clicked, Piece) and board.player == clicked.color:
+                board.select_piece(clicked)
+
+            elif not board.selected_piece and isinstance(clicked, Piece) and board.player != clicked.color:
+
+                board.set_reselect()
+
+            else:
+                # Case: Move to open square
+                if clicked == None:
+
+                    board.move_to_open(clicked_coords[0], clicked_coords[1])
+
+                elif isinstance(clicked, Piece) and clicked.color != board.player:
+
+                    board.capture(clicked)
+
+                elif isinstance(clicked, Piece) and clicked.color == board.player:
+
+                    if isinstance(board.selected_piece, King) and isinstance(clicked, Rook):
+
+                        if board.selected_piece.can_castle_kingside() and (clicked_coords == (0, 0) or clicked_coords == (7, 0)):
+                            board.castle_kingside()
+
+                        elif board.selected_piece.can_castle_queenside() and clicked_coords == (7, 0) or clicked_coords == (7, 7):
+                            board.castle_queenside()
+
+                    board.set_reselect()
 
 def main_menu():
     global game_running
+    global single_player_running
     background_color = (43, 42, 39)
     rect_height = SCREEN_HEIGHT // 10
     rect_width = SCREEN_WIDTH // 5
 
     while True:
 
-        if game_running:
+        if game_running or single_player_running:
             break
+
         else:
             screen.fill(background_color)
 
+            pygame.draw.rect(screen, (235, 233, 228), (SCREEN_WIDTH // 2 - rect_width // 2, SCREEN_HEIGHT //
+                             2 - rect_height - 160, rect_width, rect_height), border_radius=rect_width // 14)
             pygame.draw.rect(screen, (235, 233, 228), (SCREEN_WIDTH // 2 - rect_width // 2, SCREEN_HEIGHT //
                              2 - rect_height - 60, rect_width, rect_height), border_radius=rect_width // 14)
             pygame.draw.rect(screen, (235, 233, 228), (SCREEN_WIDTH // 2 - rect_width // 2, SCREEN_HEIGHT //
@@ -238,6 +326,10 @@ def main_menu():
                             file.handle_load(board)
                             game_running = True
 
+                        elif (clicked_pos[1] > (SCREEN_HEIGHT // 2 - rect_height - 150) and clicked_pos[1] < SCREEN_HEIGHT //2 - 150):
+                            print(True)
+                            single_player_running = True
+
                         elif (clicked_pos[1] > (SCREEN_HEIGHT // 2 + rect_height // 2 + 20) and (clicked_pos[1] < SCREEN_HEIGHT // 2 + rect_height // 2 + 20 + rect_height)):
                             # Quit button
                             sys.exit()
@@ -247,5 +339,7 @@ def main_menu():
 while True:
     if game_running:
         chess()
+    elif single_player_running:
+        single_player()
     else:
         main_menu()
