@@ -39,10 +39,10 @@ def draw():
     # display_time()
 
 #Draws the game board
-#TODO: Change board orientation based on the random selection
 def draw_board(squares):
+    global board
     square_size = SCREEN_HEIGHT // 8
-    # White Squares
+
     for x in range(0, 8, 2):
         for y in range(0, 8, 2):
             pygame.draw.rect(screen, (255, 255, 255), (x*square_size,
@@ -52,7 +52,6 @@ def draw_board(squares):
             pygame.draw.rect(screen, (255, 255, 255), (x*square_size,
                              y*square_size, square_size, square_size))
 
-    # Black squares
     for x in range(1, 8, 2):
         for y in range(0, 8, 2):
             pygame.draw.rect(screen, (51, 25, 0), (x*square_size,

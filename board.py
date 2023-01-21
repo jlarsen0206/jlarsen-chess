@@ -22,8 +22,8 @@ class Board:
     LOWER_COLOR = "WHITE" if orientation != 0 else "BLACK"
 
     squares = [
-        [rook.Rook(UPPER_COLOR), knight.Knight(UPPER_COLOR), bishop.Bishop(UPPER_COLOR), king.King(UPPER_COLOR), queen.Queen(
-            UPPER_COLOR), bishop.Bishop(UPPER_COLOR), knight.Knight(UPPER_COLOR), rook.Rook(UPPER_COLOR)],
+        [rook.Rook(UPPER_COLOR), knight.Knight(UPPER_COLOR), bishop.Bishop(UPPER_COLOR), king.King(UPPER_COLOR) if orientation == 0 else queen.Queen(UPPER_COLOR), queen.Queen(
+            UPPER_COLOR) if orientation == 0 else king.King(UPPER_COLOR), bishop.Bishop(UPPER_COLOR), knight.Knight(UPPER_COLOR), rook.Rook(UPPER_COLOR)],
         [pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(
             UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1), pawn.Pawn(UPPER_COLOR, 1)],
         [None, None, None, None, None, None, None, None],
@@ -32,8 +32,8 @@ class Board:
         [None, None, None, None, None, None, None, None],
         [pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(
             LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1), pawn.Pawn(LOWER_COLOR, -1)],
-        [rook.Rook(LOWER_COLOR), knight.Knight(LOWER_COLOR), bishop.Bishop(LOWER_COLOR), king.King(
-            LOWER_COLOR), queen.Queen(LOWER_COLOR), bishop.Bishop(LOWER_COLOR), knight.Knight(LOWER_COLOR), rook.Rook(LOWER_COLOR)]
+        [rook.Rook(LOWER_COLOR), knight.Knight(LOWER_COLOR), bishop.Bishop(LOWER_COLOR), king.King(LOWER_COLOR) if orientation == 0 else queen.Queen(LOWER_COLOR), queen.Queen(
+            LOWER_COLOR) if orientation == 0 else king.King(LOWER_COLOR), bishop.Bishop(LOWER_COLOR), knight.Knight(LOWER_COLOR), rook.Rook(LOWER_COLOR)]
     ]
 
     def update_player(self):
